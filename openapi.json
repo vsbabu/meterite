@@ -1,0 +1,765 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "meterite",
+    "description": "\n    Meterite is a sink for timebased metrics\n    - Create metrics\n    - Add meter reading to each metric\n    - If reading timestamp is not given, use system time\n    - You can truncate the meter readings to 5th minute, hour, week etc.\n    - Keep current and last reading info handy at metric level\n    - Meters are grouped by orgs and authentication keys are tied to orgs.\n    ",
+    "version": "1.0"
+  },
+  "paths": {
+    "/logout": {
+      "get": {
+        "tags": [
+          "docs"
+        ],
+        "summary": "Route Logout And Remove Cookie",
+        "operationId": "route_logout_and_remove_cookie_logout_get",
+        "responses": {
+          "404": {
+            "description": "Not found"
+          },
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/docs": {
+      "get": {
+        "tags": [
+          "docs"
+        ],
+        "summary": "Swagger documentation",
+        "operationId": "get_documentation_docs_get",
+        "responses": {
+          "404": {
+            "description": "Not found"
+          },
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyQuery": []
+          },
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ]
+      }
+    },
+    "/redocs": {
+      "get": {
+        "tags": [
+          "docs"
+        ],
+        "summary": "Redocs documentation",
+        "operationId": "get_redocumentation_redocs_get",
+        "responses": {
+          "404": {
+            "description": "Not found"
+          },
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyQuery": []
+          },
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ]
+      }
+    },
+    "/metric/": {
+      "get": {
+        "tags": [
+          "metric"
+        ],
+        "summary": "Read Metrics",
+        "operationId": "read_metrics_metric__get",
+        "parameters": [
+          {
+            "required": false,
+            "schema": {
+              "title": "Limit",
+              "type": "integer",
+              "default": 100
+            },
+            "name": "limit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not found"
+          },
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Read Metrics Metric  Get",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Metric"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyQuery": []
+          },
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "metric"
+        ],
+        "summary": "Create Metric",
+        "operationId": "create_metric_metric__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MetricBase"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "404": {
+            "description": "Not found"
+          },
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metric"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyQuery": []
+          },
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ]
+      }
+    },
+    "/metric/{code}/activate": {
+      "post": {
+        "tags": [
+          "metric"
+        ],
+        "summary": "Activate Metric",
+        "operationId": "activate_metric_metric__code__activate_post",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Code",
+              "type": "string"
+            },
+            "name": "code",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not found"
+          },
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metric"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyQuery": []
+          },
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ]
+      }
+    },
+    "/metric/{code}/deactivate": {
+      "post": {
+        "tags": [
+          "metric"
+        ],
+        "summary": "Deactivate Metric",
+        "operationId": "deactivate_metric_metric__code__deactivate_post",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Code",
+              "type": "string"
+            },
+            "name": "code",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not found"
+          },
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metric"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyQuery": []
+          },
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ]
+      }
+    },
+    "/metric/{code}": {
+      "get": {
+        "tags": [
+          "metric"
+        ],
+        "summary": "Get Metric",
+        "operationId": "get_metric_metric__code__get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Code",
+              "type": "string"
+            },
+            "name": "code",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not found"
+          },
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metric"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyQuery": []
+          },
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "metric"
+        ],
+        "summary": "Modify Metric",
+        "operationId": "modify_metric_metric__code__put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MetricBase"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "404": {
+            "description": "Not found"
+          },
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metric"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyQuery": []
+          },
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "meter"
+        ],
+        "summary": "Record Meter",
+        "operationId": "record_meter_metric__code__post",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Code",
+              "type": "string"
+            },
+            "name": "code",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MeterBase"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "404": {
+            "description": "Not found"
+          },
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Meter"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyQuery": []
+          },
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "metric"
+        ],
+        "summary": "Delete Metric",
+        "operationId": "delete_metric_metric__code__delete",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Code",
+              "type": "string"
+            },
+            "name": "code",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not found"
+          },
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Metric"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyQuery": []
+          },
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "APIKeyCookie": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "title": "HTTPValidationError",
+        "type": "object",
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            }
+          }
+        }
+      },
+      "Meter": {
+        "title": "Meter",
+        "required": [
+          "reading",
+          "metric_id"
+        ],
+        "type": "object",
+        "properties": {
+          "reading": {
+            "title": "Reading",
+            "type": "integer"
+          },
+          "reading_at": {
+            "title": "Reading At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "metric_id": {
+            "title": "Metric Id",
+            "type": "integer"
+          },
+          "recorded_at": {
+            "title": "Recorded At",
+            "type": "string",
+            "format": "date-time",
+            "default": "2020-04-14T13:23:23.428079"
+          }
+        }
+      },
+      "MeterBase": {
+        "title": "MeterBase",
+        "required": [
+          "reading"
+        ],
+        "type": "object",
+        "properties": {
+          "reading": {
+            "title": "Reading",
+            "type": "integer"
+          },
+          "reading_at": {
+            "title": "Reading At",
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Metric": {
+        "title": "Metric",
+        "required": [
+          "code",
+          "name",
+          "id",
+          "org"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "min_reading": {
+            "title": "Min Reading",
+            "type": "integer",
+            "default": -9999999
+          },
+          "max_reading": {
+            "title": "Max Reading",
+            "type": "integer",
+            "default": 9999999
+          },
+          "truncate_reading_to": {
+            "title": "Truncate Reading To",
+            "type": "string",
+            "description": "Given reading time is truncated to this and upserted. See https://pypi.org/project/datetime_truncate/ for values."
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "org": {
+            "title": "Org",
+            "type": "string"
+          },
+          "active": {
+            "title": "Active",
+            "type": "boolean",
+            "description": "Only active metrics can have meters; and it has to be deactivated before deletion.",
+            "default": true
+          },
+          "current_reading": {
+            "title": "Current Reading",
+            "type": "integer"
+          },
+          "current_reading_at": {
+            "title": "Current Reading At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_reading": {
+            "title": "Last Reading",
+            "type": "integer"
+          },
+          "last_reading_at": {
+            "title": "Last Reading At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "meters": {
+            "title": "Meters",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Meter"
+            }
+          }
+        }
+      },
+      "MetricBase": {
+        "title": "MetricBase",
+        "required": [
+          "code",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "min_reading": {
+            "title": "Min Reading",
+            "type": "integer",
+            "default": -9999999
+          },
+          "max_reading": {
+            "title": "Max Reading",
+            "type": "integer",
+            "default": 9999999
+          },
+          "truncate_reading_to": {
+            "title": "Truncate Reading To",
+            "type": "string",
+            "description": "Given reading time is truncated to this and upserted. See https://pypi.org/project/datetime_truncate/ for values."
+          }
+        }
+      },
+      "ValidationError": {
+        "title": "ValidationError",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "loc": {
+            "title": "Location",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "APIKeyQuery": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "x-auth-token"
+      },
+      "APIKeyHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-auth-token"
+      },
+      "APIKeyCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "x-auth-token"
+      }
+    }
+  }
+}
