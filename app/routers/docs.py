@@ -13,16 +13,21 @@ from ..main import app
 
 router = APIRouter()
 
+
 @router.get("/logout")
 async def route_logout_and_remove_cookie():
     response = RedirectResponse(url="/")
-    response.delete_cookie(config.Settings().api_key_name, domain=config.Settings().cookie_domain)
+    response.delete_cookie(
+        config.Settings().api_key_name, domain=config.Settings().cookie_domain
+    )
     return response
 
 
 @router.get("/docs", summary="Swagger documentation")
 async def get_documentation(api_key: APIKey = Depends(get_api_key)):
-    response = get_swagger_ui_html(openapi_url="/openapi.json", title="API:" + app.title)
+    response = get_swagger_ui_html(
+        openapi_url="/openapi.json", title="API:" + app.title
+    )
     response.set_cookie(
         config.Settings().api_key_name,
         value=api_key,
@@ -47,11 +52,15 @@ async def get_redocumentation(api_key: APIKey = Depends(get_api_key)):
     )
     return response
 
+
 @router.get("/openapi.json", include_in_schema=False)
 async def get_open_api_endpoint(api_key: APIKey = Depends(get_api_key)):
     response = JSONResponse(
         get_openapi(
-            title=app.title, version=app.version, routes=app.routes, description=app.description
+            title=app.title,
+            version=app.version,
+            routes=app.routes,
+            description=app.description,
         )
     )
     return response
