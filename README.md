@@ -25,7 +25,7 @@ It is an abbreviation of *Meter* + *Write* and not a spelling mistake for
 rendered by mrindoc is a good place to start
 * Meters are recorded to a Metric.
 
-[API Spec](https://mrin9.github.io/OpenAPI-Viewer/#/load/https%3A%2F%2Fapi.apis.guru%2Fv2%2Fspecs%2Fbitbucket.org%2F2.0%2Fswagger.json)
+[API Spec](https://mrin9.github.io/OpenAPI-Viewer/#/load/https%3A%2F%2Fraw.githubusercontent.com%2Fvsbabu%2Fmeterite%2Fmaster%2Fopenapi.json)
 
 Best way to peruse those is to clone repo and deploy this and test it with auto generated docs.
 
