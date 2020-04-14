@@ -30,6 +30,8 @@ rendered by mrindoc is a good place to start
 Best way to peruse those is to clone repo and deploy this and test it with auto generated docs.
 
 ## Setup
+I am assuming you've installed Anaconda Python in the PATH. If not, just `pip`
+will do fine.
 
 ```sh
 conda create -n py82 python=3.8.2
@@ -51,7 +53,8 @@ api_tokens={"123456": "org_01", "567890": "org_02"}
 
 Then, start uvicorn as below.
 ```sh
-uvicorn app.main:app --reload
+uvicorn app.main:app 
+# add `--reload` to the command above to do live debugging - useful in VS Code
 ``` 
 
 And now navigate to http://localtest.me:8000/docs?x-auth-token=123456
@@ -67,12 +70,11 @@ scripts/load_sample.sh
 
 ## TODO
 
-* [ ] Raise events or background tasks when meters are recorded with values outside of
-      min/max settings. We should've some mechanism to plugin handlers outside
-      the repo to this.
-* [ ] Add separate background tasks to mark readings as anomalies; [fbprophet](https://facebook.github.io/prophet/) is pretty neet for that.
-* [ ] Provide a UI for configuration. Seriously? No!
+* [ ] Harden the code for exceptions like DB not opening, query failed etc.
+* [ ] Raise events or background tasks when meters are recorded with values outside of min/max settings. We should've some mechanism to plugin handlers outside the repo to this.
+* [ ] Add separate background tasks to mark readings as anomalies; [fbprophet](https://facebook.github.io/prophet/) is pretty neat for that.
 * [ ] Setup with gunicorn as well.
+* [ ] Provide a UI for configuration. Seriously? No!
 
 ## Thanks
 
